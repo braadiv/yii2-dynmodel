@@ -1,0 +1,24 @@
+{
+	"name": "braadiv/yii2-dynmodel",
+	"description": "It is widget to yii2 framework to Generate dynamic model or multiple models",
+	"license": "MIT",
+    "keywords": ["yii2","extension","braadiv","dynamic form","dynamic model","Generate dynamic model","dynamic multiple models model"],
+	"type": "yii2-extension",
+	"authors": [
+        {
+            "name": "Braa Alsalahi",
+            "email": "braaalsalahi2013@gmail.com"
+        }
+    ],
+	"minimum-stability": "dev",
+	"require": {
+		"php": ">=5.5.0",
+		"yiisoft/yii2": ">=2.0.5"
+	},
+	"autoload": {
+		"psr-4": {
+			"braadiv\\dynmodel\\": "./src"
+		}
+	}
+}
+
