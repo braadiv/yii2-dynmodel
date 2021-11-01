@@ -11,7 +11,7 @@ use yii\base\DynamicModel as BaseEavModel;
 use yii\db\ActiveRecord;
 use yii\widgets\ActiveForm;
 use braadiv\dynmodel\models\EavAttribute;
-
+use NXP\MathExecutor;
 /**
  * Class EavModel
  *
@@ -19,6 +19,9 @@ use braadiv\dynmodel\models\EavAttribute;
  */
 class EavModel extends BaseEavModel
 {
+    public $ConditionClass = "\common\\modules\\models\\Condition";
+    public $CompareClass = "\common\\modules\\models\\Compare";
+
     /** @var string Class to use for storing data */
     public $valueClass;
 
@@ -37,6 +40,15 @@ class EavModel extends BaseEavModel
     /** @var string[] */
     private $attributeLabels = [];
 
+
+    public $condition;
+
+    public $plan_app_id;
+    
+    public $row_no;
+
+
+
     /**
      * Constructor for creating form model from entity object
      *
@@ -49,7 +61,11 @@ class EavModel extends BaseEavModel
 
         /** @var static $model */
         $model = Yii::createObject($params);
-
+        // if(isset($params['condition'])){
+        // // print_r($params);
+        // //     die();
+        //     $model->entityModel->condition = $params['condition'];
+        // }
         $params = [];
 
         /**
@@ -139,7 +155,28 @@ class EavModel extends BaseEavModel
         $transaction = $db->beginTransaction();
         try {
             foreach ($this->handlers as $handler) {
-                $handler->valueHandler->save();
+                // echo "<pre>";
+                // $Condition =$this->ConditionClass::find()->where(['attributeId'=>$handler->attributeModel->id])->one();
+                $Condition =$handler->attributeModel->planCondition;
+                if($Condition){
+                // print_r($handler->attributeModel->planCondition); die();
+                    $field1 = $this->handlers['c'.$Condition->field_1];
+                    $value1 = $field1->valueHandler->getValueModel()->option->index_value;
+                    $field2 = $this->handlers['c'.$Condition->field_2];
+                    $value2 = $field2->valueHandler->getValueModel()->option->index_value;
+                    
+                    $executor = new MathExecutor();
+                    $value = $executor->execute("$value1 $Condition->operator $value2 ");
+                    $Compares = $Condition->compareModels;
+                    foreach ($Compares as $row ) {
+                        if($executor->execute("$value $row->operator $row->value ")){
+                                $this->__set($handler->attributeModel->name,$row->optionId);
+                            break;
+                        }
+                    }
+                }
+                
+                $handler->valueHandler->save(!$runValidation);
             }
             $transaction->commit();
         } catch (\Exception $e) {

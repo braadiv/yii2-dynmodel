@@ -3,7 +3,6 @@
 namespace braadiv\dynmodel\models;
 
 use Yii;
-use yii\helpers\ArrayHelper;
 
 /**
  * This is the model class for table "{{%eav_attribute}}".
@@ -106,7 +105,7 @@ class EavAttribute extends \yii\db\ActiveRecord
     public function getEavOptions()
     {
         return $this->hasMany(EavAttributeOption::className(), ['attributeId' => 'id'])
-            ->orderBy(['order' => SORT_ASC]);
+            ->orderBy(['eav_attribute_option.order' => SORT_ASC]);
     }
 
     /**
@@ -135,6 +134,7 @@ class EavAttribute extends \yii\db\ActiveRecord
         return [
             'cid' => '',
             'label' => '',
+            'label_en' => '',
             'field_type' => '',
             'required' => '',
             'field_options' => [],
@@ -167,6 +167,23 @@ class EavAttribute extends \yii\db\ActiveRecord
             $this->_description = $this->description_en;
         }
     }
+
+
+    public function isCondition()
+    {
+        $dd = \common\modules\models\PlanCondition::findOne([ 'attributeId'=>  $this->id]);
+        if($dd){
+            return true;
+        }
+        return false;
+    }
+
+
+    public function getPlanCondition()
+    {
+        return $this->hasOne(\common\modules\models\PlanCondition::className(), ['attributeId' => 'id']);
+    }
+    
 
 
 }

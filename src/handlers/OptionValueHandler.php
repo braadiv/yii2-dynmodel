@@ -63,6 +63,9 @@ class OptionValueHandler extends ValueHandler
 
     public function getTextValue()
     {
+        if(!isset($this->getValueModel()->option->value)){
+            return '';
+        }
         return $this->getValueModel()->option->value;
     }
 

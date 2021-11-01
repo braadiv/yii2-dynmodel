@@ -41,6 +41,7 @@ class Fields extends Widget
             $options = ArrayHelper::merge(
                 [
                     'description' => $attribute->description,
+                    'description_en' => $attribute->description_en,
                     'required' => (bool)$attribute->required,
                     'visible' => (bool)$attribute->attributeRule->visible,
                     'locked' => (bool)$attribute->attributeRule->locked,
@@ -53,6 +54,8 @@ class Fields extends Widget
             foreach ($attribute->eavOptions as $option) {
                 $options['options'][] = [
                     'label' => $option->value,
+                    'label_en' => $option->value_en,
+                    'index_value' => $option->index_value,
                     'id' => $option->id,
                     'checked' => (bool)$option->defaultOptionId,
                 ];
@@ -61,6 +64,7 @@ class Fields extends Widget
             $this->bootstrapData[] = [
                 'group_name' => $attribute->type,
                 'label' => $attribute->label,
+                'label_en' => $attribute->label_en,
                 'field_type' => $attribute->eavType->name,
                 'field_options' => $options,
                 'cid' => $attribute->name,

@@ -95,7 +95,7 @@ class m150821_133232_init extends Migration
                 'id' => $this->primaryKey(11),
                 'name' => $this->string(255)->defaultValue('NULL'),
                 'handlerClass' => $this->string(255)->defaultValue('NULL'),
-                'storeType' => $this->smallInteger(6)->defaultValue(0),
+                'storeType' => $this->smallInteger(6)->defaultValue(0)
             ],
             $options
         );
@@ -109,7 +109,7 @@ class m150821_133232_init extends Migration
                 'value' => $this->string(255)->defaultValue('NULL'),
                 'optionId' => $this->integer(11)->defaultValue(0),
                 'plan_app_id' => $this->integer(11)->defaultValue(0),
-                'order' => $this->integer(11)->defaultValue('NULL'),
+                'order' => $this->integer(11)->defaultValue(0)
             ],
             $options
         );
@@ -122,7 +122,7 @@ class m150821_133232_init extends Migration
                 'value' => $this->string(255)->defaultValue('NULL'),
                 'value_en' => $this->string(255)->defaultValue('NULL'),
                 'index_value' => $this->string(255)->defaultValue('NULL'),
-                'defaultOptionId' => $this->smallInteger(1)->defaultValue(0),
+                'defaultOptionId' => $this->smallInteger(1)->defaultValue(0)
             ],
             $options
         );

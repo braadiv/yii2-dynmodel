@@ -137,6 +137,9 @@ class MultipleOptionsValueHandler extends ValueHandler
 
         $values = [];
         foreach ($models as $model) {
+            if(!isset($model->option->value)){
+                continue;
+            }
             $values[] = $model->option->value;
         }
 

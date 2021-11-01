@@ -31,7 +31,7 @@ class AttributeHandler extends Widget
     public $attributeModel;
 
     public $nameField = 'name';
-    public $labelField = 'label';
+    public $labelField = '_label';
     public $options = [];
 
     /**

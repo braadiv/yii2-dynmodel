@@ -101,7 +101,7 @@ class AjaxController extends Controller
                             ['name' => $field['field_type']]
                         )->scalar();
                         $attribute->label = $field['label'];
-                        $attribute->label_en = $field['label_n'];
+                        $attribute->label_en = $field['label_en'] ?? '';
                         $attribute->order = $order;
 
                         if (isset($field['field_options']['description'])) {
@@ -139,14 +139,15 @@ class AjaxController extends Controller
                                 if (!$option) {
                                     $option = new EavAttributeOption;
                                 }
+
                                 $option->attributeId = $attribute->id;
                                 $option->value = $o['label'];
-                                $option->value_en = $o['label_en'];
-                                $option->index_value = $o['index_value'] ?? $k;
+                                $option->value_en = $o['label_en']?? '';
+                                $option->index_value = (string) ($o['index_value'] ?? $k);
                                 $option->defaultOptionId = (int)$o['checked'];
                                 $option->order = $k;
                                 $option->save();
-
+                                // print_r($option);
                                 $options[] = $option->value;
                             }
 
