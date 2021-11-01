@@ -165,18 +165,20 @@
 				}
 
 				ViewFieldView.prototype.render = function () {
-						this.$el.addClass('response-field-' +
-									this.model.get(
-										Formbuilder.names.FIELD_TYPE
-									)
-								)
-								.data('cid', this.model.cid)
-								.html(
-									Formbuilder.templates["view/base" + (!this.model.is_input() ? '_non_input' : '')]({
-										rf: this.model
-									})
-								);
-						return this;
+					tempClass = this.model.attributes.is_template? 'fieldTemp' : '';
+					this.$el.addClass('response-field-' +
+								this.model.get(
+									Formbuilder.names.FIELD_TYPE
+								)  
+								+ ' ' + tempClass
+							)
+							.data('cid', this.model.cid)
+							.html(
+								Formbuilder.templates["view/base" + (!this.model.is_input() ? '_non_input' : '')]({
+									rf: this.model
+								})
+							);
+					return this;
 				}
 
 				ViewFieldView.prototype.focusEditView = function () {

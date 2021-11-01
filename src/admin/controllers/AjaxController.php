@@ -93,6 +93,13 @@ class AjaxController extends Controller
                                           ->limit(1)
                                           ->scalar() + 1;
                             $attribute->name = 'c' . $lastId;
+
+                            if(isset($field['cid'])){
+                                $attributeTemp = EavAttribute::findOne(['name' => $field['cid']]);
+                                if (!empty($attributeTemp)) {
+                                    $attribute->attributeTempId = $attributeTemp->id ;
+                                }
+                            }
                         }
 
                         $attribute->type = $field['group_name'];
@@ -118,6 +125,8 @@ class AjaxController extends Controller
                             $attribute->description_en = '';
                         }
 
+                        // $attribute->attributeTempId = $field['attributeTempId']?? null;
+                        // print_r($attribute->getErrors()); die();
                         $attribute->save(false);
 
 

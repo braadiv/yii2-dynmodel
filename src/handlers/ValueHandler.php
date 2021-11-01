@@ -26,7 +26,7 @@ abstract class ValueHandler
     public $attributeHandler;
 
     /**
-     * @return ActiveRecord
+     * @return ActiveRecord 
      * @throws \Exception
      * @throws \yii\base\InvalidConfigException
      */

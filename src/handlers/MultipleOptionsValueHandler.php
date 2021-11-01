@@ -132,6 +132,8 @@ class MultipleOptionsValueHandler extends ValueHandler
             [
                 'entityId' => $EavModel->entityModel->getPrimaryKey(),
                 'attributeId' => $this->attributeHandler->attributeModel->getPrimaryKey(),
+                'plan_app_id' => $EavModel->plan_app_id,
+                'order' => $EavModel->row_no,
             ]
         );
 

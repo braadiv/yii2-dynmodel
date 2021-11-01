@@ -17,6 +17,7 @@ use Yii;
  * @property integer $defaultOptionId
  * @property integer $required
  * @property integer $order
+ * @property integer $attributeTempId
  * @property string $description
  * @property EavAttributeOption $defaultOption
  * @property EavAttributeType $eavType
@@ -50,7 +51,7 @@ class EavAttribute extends \yii\db\ActiveRecord
                 'message' => Yii::t('eav', 'Attribute name must contain latin word characters only.'),
             ],
             [['type'], 'string', 'max' => 50],
-            [['entityId', 'typeId', 'order'], 'integer'],
+            [['entityId', 'typeId', 'order','attributeTempId'], 'integer'],
         ];
     }
 
@@ -122,6 +123,11 @@ class EavAttribute extends \yii\db\ActiveRecord
     public function getAttributeRule()
     {
         return $this->hasOne(EavAttributeRule::className(), ['attributeId' => 'id']);
+    }
+
+    public function getAttributeTemplate()
+    {
+        return $this->hasOne(EavAttribute::className(), ['id' => 'attributeTempId']);
     }
 
     public function getRequired()

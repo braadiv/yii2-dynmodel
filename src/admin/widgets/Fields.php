@@ -31,13 +31,14 @@ class Fields extends Widget
 
         $this->entityModel = str_replace('\\', '\\\\', $this->entityModel);
 
-        $attributes = $this->model->getEavAttributes()
+        $attributes = $this->model->getEavAttributes(true)
             ->joinWith('entity')
             ->joinWith('attributeRule')
             ->all();
 
         /** @var EavAttribute $attribute */
         foreach ($attributes as $attribute) {
+            
             $options = ArrayHelper::merge(
                 [
                     'description' => $attribute->description,
@@ -58,6 +59,7 @@ class Fields extends Widget
                     'index_value' => $option->index_value,
                     'id' => $option->id,
                     'checked' => (bool)$option->defaultOptionId,
+
                 ];
             }
 
@@ -68,6 +70,7 @@ class Fields extends Widget
                 'field_type' => $attribute->eavType->name,
                 'field_options' => $options,
                 'cid' => $attribute->name,
+                'is_template' => (bool) ($attribute->entity->categoryId !== $this->model->id),
             ];
         }
 
