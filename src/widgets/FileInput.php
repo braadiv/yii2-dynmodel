@@ -7,8 +7,10 @@ namespace braadiv\dynmodel\widgets;
 
 use Yii;
 
-class TextInput extends AttributeHandler
+class FileInput extends AttributeHandler
 {
+    const VALUE_HANDLER_CLASS = '\braadiv\dynmodel\handlers\FileValueHandler';
+
     static $order = 0;
 
     static $fieldView = <<<TEMPLATE
@@ -20,17 +22,10 @@ TEMPLATE;
 
     static $fieldSettings = <<<TEMPLATE
 		<%= Formbuilder.templates['edit/field_options']() %>
-		<%= Formbuilder.templates['edit/min_max_length']() %>
 TEMPLATE;
-// show size from field
-// static $fieldSettings = <<<TEMPLATE
-//         <%= Formbuilder.templates['edit/field_options']() %>
-//         <%= Formbuilder.templates['edit/size']() %>
-//         <%= Formbuilder.templates['edit/min_max_length']() %>
-// TEMPLATE;
 
     static $fieldButton = <<<TEMPLATE
-		<span class='symbol'><span class='fa fa-font'></span></span> <%= Formbuilder.lang('Input textfield') %>
+		<span class='symbol'><span class='fa fa-upload'></span></span> <%= Formbuilder.lang('Input File') %>
 TEMPLATE;
 
     static $defaultAttributes = <<<TEMPLATE
@@ -47,6 +42,6 @@ TEMPLATE;
             $this->getAttributeName(),
             ['template' => "{input}\n{hint}\n{error}"]
         )
-            ->textInput($this->options);
+            ->fileInput($this->options);
     }
 }

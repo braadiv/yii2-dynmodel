@@ -32,6 +32,7 @@ TEMPLATE;
     static $fieldSettings = <<<TEMPLATE
 		<%= Formbuilder.templates['edit/field_options']() %>
 		<%= Formbuilder.templates['edit/options']({
+			includeIndexOption: true,
 			rf: rf
 		}) %>
 TEMPLATE;

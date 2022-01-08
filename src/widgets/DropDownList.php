@@ -38,6 +38,7 @@ TEMPLATE;
 		<%= Formbuilder.templates['edit/options']({
 				includeBlank: true,
 				useMultiple: true,
+				includeIndexOption: true,
 				rf: rf
 		}) %>
 TEMPLATE;

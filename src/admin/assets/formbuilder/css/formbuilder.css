@@ -289,6 +289,7 @@
 
 .fb-common-wrapper .fb-label-description textarea {
     min-height: 5em
+    margin: 5px;
 }
 
 .response-field-draggable-helper {

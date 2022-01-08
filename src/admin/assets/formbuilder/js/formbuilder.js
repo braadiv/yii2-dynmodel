@@ -1172,13 +1172,15 @@
 
 									'<input type="text" data-rv-input="option:label_en" ' +
 									'class="option-label-input" placeholder=" ' +
-									'' + Formbuilder.lang('Option label En') + '" />' +
-
-									'<input type="text" data-rv-input="option:index_value" ' +
+									'' + Formbuilder.lang('Option label En') + '" />';
+						if(typeof includeIndexOption !== 'undefined'){
+								__p += '<input type="number" data-rv-input="option:index_value" ' +
 									'class="option-label-input" placeholder=" ' +
-									'' + Formbuilder.lang('Option Value') + '" />' +
+									'' + Formbuilder.lang('Option Value') + '" />';
+						}
+									
 
-								'</div><div class="col-sm-4"> ' +
+						__p +=	'</div><div class="col-sm-4"> ' +
 
 									'<a class="js-sort-up-option btn-xs btn-success ' + ((__t = ( Formbuilder.names.BUTTON_CLASS )) == null ? '' : __t) +
 									'" title="' + Formbuilder.lang('Sort up') + '"><i class="fa fa-arrow-up"></i></a> ' +
@@ -1236,13 +1238,13 @@
 								((__t = ( Formbuilder.names.REQUIRED )) == null ? '' : __t) +
 								'" />  ' + Formbuilder.lang('Required') + '</label><br>';
 
-						__p += '<label>  <input type="checkbox" data-rv-checked="model.' +
-								((__t = ( Formbuilder.names.LOCKED )) == null ? '' : __t) +
-								'" />  ' + Formbuilder.lang('Read only') + '</label><br>';
+						// __p += '<label>  <input type="checkbox" data-rv-checked="model.' +
+						// 		((__t = ( Formbuilder.names.LOCKED )) == null ? '' : __t) +
+						// 		'" />  ' + Formbuilder.lang('Read only') + '</label><br>';
 
-						__p += '<label>  <input type="checkbox" data-rv-checked="model.' +
-								((__t = ( Formbuilder.names.VISIBLE )) == null ? '' : __t) +
-								'" />  ' + Formbuilder.lang('Visible') + '</label>';
+						// __p += '<label>  <input type="checkbox" data-rv-checked="model.' +
+						// 		((__t = ( Formbuilder.names.VISIBLE )) == null ? '' : __t) +
+						// 		'" />  ' + Formbuilder.lang('Visible') + '</label>';
 
 				}
 				return __p
@@ -1278,11 +1280,11 @@
 								'" style="width: 60px" />' + Formbuilder.lang('Max') + '&nbsp;<input type="text" data-rv-input="model.' +
 
 								((__t = ( Formbuilder.names.MAXLENGTH )) == null ? '' : __t) +
-								'" style="width: 60px" />&nbsp;&nbsp;<select data-rv-value="model.' +
+								'" style="width: 60px" />&nbsp;&nbsp;<select data-rv-value="model.';
 
-								((__t = ( Formbuilder.names.LENGTH_UNITS )) == null ? '' : __t) +
-								'" style="width: auto;">  <option value="characters">' + Formbuilder.lang('characters') + '</option>  ' +
-								'<option value="words">' + Formbuilder.lang('words') + '</option></select>';
+								// ((__t = ( Formbuilder.names.LENGTH_UNITS )) == null ? '' : __t) +
+								// '" style="width: auto;">  <option value="characters">' + Formbuilder.lang('characters') + '</option>  ' +
+								// '<option value="words">' + Formbuilder.lang('words') + '</option></select>';
 				}
 				return __p
 		}

@@ -139,10 +139,10 @@ class MultipleOptionsValueHandler extends ValueHandler
 
         $values = [];
         foreach ($models as $model) {
-            if(!isset($model->option->value)){
+            if(!isset($model->option->_value)){
                 continue;
             }
-            $values[] = $model->option->value;
+            $values[] = $model->option->_value;
         }
 
         return implode(', ', $values);

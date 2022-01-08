@@ -49,6 +49,8 @@ class EavModel extends BaseEavModel
 
 
 
+
+
     /**
      * Constructor for creating form model from entity object
      *
@@ -61,11 +63,7 @@ class EavModel extends BaseEavModel
 
         /** @var static $model */
         $model = Yii::createObject($params);
-        // if(isset($params['condition'])){
-        // // print_r($params);
-        // //     die();
-        //     $model->entityModel->condition = $params['condition'];
-        // }
+      
         $params = [];
 
         /**
@@ -106,8 +104,10 @@ class EavModel extends BaseEavModel
             //
 
             $value = $handler->valueHandler->load();
-            if (!$value) {
-                // Set default attribute
+            // is_null(var)
+            // var_dump($value); 
+            if (empty($value) && !is_numeric($value)) {
+            // if (empty((string)$value) && !is_numeric($value)) {
                 $value = $handler->valueHandler->defaultValue();
             }
 
@@ -140,13 +140,17 @@ class EavModel extends BaseEavModel
     {
         if (!$this->handlers) {
             Yii::info(Yii::t('eav', 'Dynamic model data were no attributes.'), __METHOD__);
+            Yii::getLogger()->log("Braadiv Dynamic model data were not save due to validation error.", \yii\log\Logger::LEVEL_WARNING, __METHOD__);
 
             return false;
         }
 
-        if ($runValidation && !$this->validate($attributes)) {
+        if ($runValidation && !$this->validate()) {
             Yii::info(Yii::t('eav', 'Dynamic model data were not save due to validation error.'), __METHOD__);
-
+            foreach ($this->getErrors() as $key => $value) {
+            $errValid = implode(',',array_values($value));
+            Yii::getLogger()->log("fieldName:$key were not save due to validation error:$errValid.", \yii\log\Logger::LEVEL_WARNING, __METHOD__);
+            }
             return false;
         }
 
@@ -159,7 +163,6 @@ class EavModel extends BaseEavModel
                 // $Condition =$this->ConditionClass::find()->where(['attributeId'=>$handler->attributeModel->id])->one();
                 $Condition =$handler->attributeModel->planCondition;
                 if($Condition){
-                // print_r($handler->attributeModel->planCondition); die();
                     $field1 = $this->handlers['c'.$Condition->field_1];
                     $value1 = $field1->valueHandler->getValueModel()->option->index_value;
                     $field2 = $this->handlers['c'.$Condition->field_2];
@@ -176,11 +179,15 @@ class EavModel extends BaseEavModel
                     }
                 }
                 
-                $handler->valueHandler->save(!$runValidation);
+                $handler->valueHandler->save($runValidation);
+
+
             }
             $transaction->commit();
         } catch (\Exception $e) {
             $transaction->rollBack();
+            Yii::getLogger()->log("Braadiv".$e, \yii\log\Logger::LEVEL_WARNING, __METHOD__);
+
             throw $e;
         }
     }
@@ -219,20 +226,17 @@ class EavModel extends BaseEavModel
         //     return $reflector. '[EavModel]';
 
         // }
-        // echo "<pre>ss";
-        // print_r($this->entityModel); 
+        
         return self::getModelShortName($this->entityModel) . '[EavModel]';
     }
 
     public static function getModelShortName($model)
     {
-        // echo "<pre>ss";
         if(isset($model->name)){
 
             $reflector =  \yii\helpers\BaseInflector::camelize($model->name);
             return $reflector;
         }
-        // print_r($this); die();
         $reflector = new \ReflectionClass($model::className());
         return $reflector->getShortName();
     }
