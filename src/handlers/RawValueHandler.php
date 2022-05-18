@@ -8,7 +8,7 @@
 namespace braadiv\dynmodel\handlers;
 
 use yii\helpers\ArrayHelper;
-
+use Yii;
 use common\modules\FormBase;
 /**
  * Class RawValueHandler
@@ -49,7 +49,12 @@ class RawValueHandler extends ValueHandler
         if (isset($EavModel->attributes[$attribute])) {
             $valueModel->value = $EavModel->attributes[$attribute];
             if (!$valueModel->save()) {
-                throw new \Exception("Can't save value model");
+                // print_r(implode(',',$valueModel->getErrors())); die();
+                // var_dump($valueModel->getErrors()); die();
+                $errValid = json_encode($valueModel->getErrors());
+                Yii::getLogger()->log("Braadiv fieldName:$attribute were not save due to validation error:$errValid.", \yii\log\Logger::LEVEL_WARNING, __METHOD__);
+                Yii::warning(Yii::t('eav', "Braadiv fieldName:$attribute were not save due to validation error:$errValid"), __METHOD__);
+                // throw new \Exception("Can't save value model");
             }
         }
     }

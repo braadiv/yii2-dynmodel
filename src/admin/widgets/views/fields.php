@@ -3,6 +3,7 @@
 use braadiv\dynmodel\admin\assets\FbAsset;
 use yii\web\View;
 
+
 /**
  * @var \yii\web\View $this
  * @var string $content
@@ -37,7 +38,7 @@ $js_form_builder = <<<JS
 JS;
 
 $this->registerJs($js_form_builder, View::POS_READY, 'js_form_builder');
-if (file_exists(Yii::getAlias('@braadiv/dynmodel') . '/admin/assets/formbuilder/locales/' . Yii::$app->language . '.js')) {
-    $this->registerJsFile($path->baseUrl . '/locales/' . Yii::$app->language . '.js', [View::POS_READY]);
+if (file_exists(\Yii::getAlias('@braadiv/dynmodel') . '/admin/assets/formbuilder/locales/' . \Yii::$app->language . '.js')) {
+    $this->registerJsFile($path->baseUrl . '/locales/' . \Yii::$app->language . '.js', [View::POS_READY]);
 }
 ?>

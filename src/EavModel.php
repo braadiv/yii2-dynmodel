@@ -19,7 +19,7 @@ use NXP\MathExecutor;
  */
 class EavModel extends BaseEavModel
 {
-    public $ConditionClass = "\common\\modules\\models\\Condition";
+    // public $ConditionClass = "\common\\modules\\models\\Condition";
     public $CompareClass = "\common\\modules\\models\\Compare";
 
     /** @var string Class to use for storing data */
@@ -41,11 +41,11 @@ class EavModel extends BaseEavModel
     private $attributeLabels = [];
 
 
-    public $condition;
+    // public $condition;
 
-    public $plan_app_id;
+    // public $plan_app_id;
     
-    public $row_no;
+    // public $row_no;
 
 
 
@@ -78,7 +78,7 @@ class EavModel extends BaseEavModel
             ->entityModel
             // Load data from owner model
             ->getEavAttributes()
-            ->joinWith('entity')
+            ->joinWith(['entity','attributeRule','eavType'])
             ->andWhere($params)
             ->all();
 
@@ -139,14 +139,14 @@ class EavModel extends BaseEavModel
     public function save($runValidation = true, $attributes = null)
     {
         if (!$this->handlers) {
-            Yii::info(Yii::t('eav', 'Dynamic model data were no attributes.'), __METHOD__);
+            Yii::warning(Yii::t('eav', 'Dynamic model data were no attributes.'), __METHOD__);
             Yii::getLogger()->log("Braadiv Dynamic model data were not save due to validation error.", \yii\log\Logger::LEVEL_WARNING, __METHOD__);
 
             return false;
         }
 
         if ($runValidation && !$this->validate()) {
-            Yii::info(Yii::t('eav', 'Dynamic model data were not save due to validation error.'), __METHOD__);
+            Yii::warning(Yii::t('eav', 'Dynamic model data were not save due to validation error.'), __METHOD__);
             foreach ($this->getErrors() as $key => $value) {
             $errValid = implode(',',array_values($value));
             Yii::getLogger()->log("fieldName:$key were not save due to validation error:$errValid.", \yii\log\Logger::LEVEL_WARNING, __METHOD__);
@@ -164,8 +164,26 @@ class EavModel extends BaseEavModel
                 $Condition =$handler->attributeModel->planCondition;
                 if($Condition){
                     $field1 = $this->handlers['c'.$Condition->field_1];
-                    $value1 = $field1->valueHandler->getValueModel()->option->index_value;
                     $field2 = $this->handlers['c'.$Condition->field_2];
+
+                   
+                    if(!isset($field1->valueHandler->getValueModel()->option)){
+                        $field1->valueHandler->save($runValidation);
+                    }
+                    if(!isset($field2->valueHandler->getValueModel()->option)){
+                        $field2->valueHandler->save($runValidation);
+                    }
+
+                     if(!isset($field1->valueHandler->getValueModel()->option) || !isset($field2->valueHandler->getValueModel()->option) ){
+                         $nameAttr = $handler->attributeModel->name;
+                        Yii::warning(Yii::t('eav', "fieldName:$nameAttr have Condition but child not have value option ."), __METHOD__);
+
+                        Yii::getLogger()->log("fieldName:$nameAttr have Condition but child not have value option .", \yii\log\Logger::LEVEL_WARNING, __METHOD__);
+                        // إذا كانت الحقول المرتبطة بالشرط لم يتم تحديدها بعد أو لم يكن هناك قيمة في هذه الحقول
+                        continue;
+                    }
+
+                    $value1 = $field1->valueHandler->getValueModel()->option->index_value;
                     $value2 = $field2->valueHandler->getValueModel()->option->index_value;
                     
                     $executor = new MathExecutor();
