@@ -1,291 +1,87 @@
-EAV Dynamic Attributes for Yii2
-========
-Архитектура баз данных EAV(Enity-Attribute-Value, Сущность-Атрибут-Значение)
+# braadiv/yii2-dynmodel
 
-[![Latest Stable Version](https://poser.pugx.org/mirocow/yii2-eav/v/stable)](https://packagist.org/packages/mirocow/yii2-eav) [![Latest Unstable Version](https://poser.pugx.org/mirocow/yii2-eav/v/unstable)](https://packagist.org/packages/mirocow/yii2-eav) [![Total Downloads](https://poser.pugx.org/mirocow/yii2-eav/downloads)](https://packagist.org/packages/mirocow/yii2-eav) [![License](https://poser.pugx.org/mirocow/yii2-eav/license)](https://packagist.org/packages/mirocow/yii2-eav)
-[![Join the chat at https://gitter.im/Mirocow/yii2-eav](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/Mirocow/yii2-eav?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+[![Latest Stable Version](https://poser.pugx.org/braadiv/yii2-dynmodel/v/stable)](https://packagist.org/packages/braadiv/yii2-dynmodel)
+[![Total Downloads](https://poser.pugx.org/braadiv/yii2-dynmodel/downloads)](https://packagist.org/packages/braadiv/yii2-dynmodel)
+[![License](https://poser.pugx.org/braadiv/yii2-dynmodel/license)](https://packagist.org/packages/braadiv/yii2-dynmodel)
+[![PHP 8.4 Ready](https://img.shields.io/badge/PHP-8.4%20LTS%20Ready-brightgreen.svg)](https://packagist.org/packages/braadiv/yii2-dynmodel)
 
-# Screenshots
+> **⚠️ PHP 8.4 LTS Modernized Fork — Dynamic Model and EAV Attributes for Yii2.**
 
-## Edit attributes
+## Credits & Attribution
+
+This package is a **modernized fork** of [`mirocow/yii2-eav`](https://github.com/mirocow/yii2-eav.git), originally created and maintained by **Mirocow (Alexey Samoylov)**.
+
+**All original code, architecture, and intellectual property belong to the original author(s).**
+
+The modifications made in this fork are:
+- Full compatibility with **PHP 8.1, 8.2, 8.3, and 8.4 LTS**.
+- Fix for PHP 8.2+ dynamic properties deprecation via `#[\AllowDynamicProperties]` and explicit property declarations.
+- Guarding against `null` in `Json::decode`, string, and math helper functions.
+- Modernized reflection resolution in `getModelShortName()`.
+- Updating `composer.json` requirements and transparent drop-in `replace` directive for `mirocow/yii2-eav`.
+
+---
+
+## Installation
+
+```bash
+composer require braadiv/yii2-dynmodel
+```
+
+---
+
+## Original Package Information
+
+| | |
+|:--|:--|
+| **Original Package** | [`mirocow/yii2-eav`](https://github.com/mirocow/yii2-eav) |
+| **Original Authors** | Alexey Samoylov (Mirocow) |
+| **Original License** | `MIT` |
+| **Fork Maintainer** | `braadiv` ([github.com/braadiv](https://github.com/braadiv)) |
+
+---
+
+# Architecture Overview
+
+EAV Dynamic Attributes for Yii2 provides an Entity-Attribute-Value (EAV) dynamic model architecture and form builder for Yii2 applications.
+
+## Screenshots
 
 ### List of attributes
-
 ![](http://images.mirocow.com/2016-05-02-23-29-39-3hcha.png)
 
 ### Edit attribute
-
 ![](http://images.mirocow.com/2016-05-02-23-39-41-5ih6u.png)
 
-## Edit form
-
+### Edit form
 ![](http://images.mirocow.com/2016-05-02-23-32-34-m98o1.png)
 
-# Install
+## Database Migrations
 
-## Add github repository
+Run the migrations to create the required EAV tables:
 
-```json
-"repositories": [
-  {
-    "type": "git",
-    "url": "https://github.com/mirocow/yii2-eav.git"
-  }
-]
-```
-and then
-
-```
-php composer.phar require --prefer-dist "mirocow/yii2-eav" "*"
+```sh
+php yii migrate/up --migrationPath=@braadiv/dynmodel/migrations
 ```
 
-## Configure
+## Behavior Configuration
 
-``` sh
-php ./yii migrate/up -p=@mirocow/eav/migrations
-```
+Attach `EavBehavior` to your ActiveRecord model:
 
-or
+```php
+use braadiv\dynmodel\EavBehavior;
+use braadiv\dynmodel\models\EavAttributeValue;
 
-``` sh
-php ./yii migrate/up -p=@vendor/mirocow/yii2-eav/src/migrations
-```
-
-and then add messages settings
-
-``` php
-    'i18n' => [
-        'translations' => [
-            'app*' => [
-                'class' => 'yii\i18n\PhpMessageSource',
-                //'basePath' => '@app/messages',
-                //'sourceLanguage' => 'en-US',
-                'fileMap' => [
-                    'app'       => 'app.php',
-                    'app/error' => 'error.php',
-                ],
-            ],
-            'eav' => [
-                'class' => 'yii\i18n\PhpMessageSource',
-                'basePath' => '@mirocow/eav/messages',
-            ],
-        ],
-    ]
-```
-
-## Use
-
-### Model
-
-#### Simple
-
-``` php
 class Product extends \yii\db\ActiveRecord
 {
-    public function rules()
-    {
-        return [
-            [['name'], 'string', 'max' => 255], // Product field
-            [['c1'], 'required'], // Attribute field
-            [['c1'], 'string', 'max' => 255], // Attribute field
-        ];
-    }
-    
     public function behaviors()
     {
         return [
             'eav' => [
-                'class' => \mirocow\eav\EavBehavior::className(),
-                // это модель для таблицы object_attribute_value
-                'valueClass' => \mirocow\eav\models\EavAttributeValue::className(),
-            ]
+                'class' => EavBehavior::class,
+                'valueClass' => EavAttributeValue::class,
+            ],
         ];
     }
-    
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getEavAttributes()
-    {
-        return \mirocow\eav\models\EavAttribute::find()
-            ->joinWith('entity')
-            ->where([
-                'categoryId' => $this->categories[0]->id,
-                'entityModel' => $this::className()
-        ]);
-    }
 }
-```
-
-#### Advanced
-
-``` php
-class Product extends \yii\db\ActiveRecord
-{
-  
-    public function rules()
-    {
-        return [
-            [['name'], 'string', 'max' => 255], // Product field
-            [['c1'], 'required'], // Attribute field
-            [['c1'], 'string', 'max' => 255], // Attribute field
-        ];
-    }
-    
-    public function behaviors()
-    {
-        return [
-            'eav' => [
-                'class' => \mirocow\eav\EavBehavior::className(),
-                // это модель для таблицы object_attribute_value
-                'valueClass' => \mirocow\eav\models\EavAttributeValue::className(),
-            ]
-        ];
-    }
-    
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getEavAttributes($attributes = [])
-    {
-        return \mirocow\eav\models\EavAttribute::find()
-            ->joinWith('entity')
-            ->where([
-                //'categoryId' => $this->categories[0]->id,
-                'entityModel' => $this::className()
-            ])
-        ->orderBy(['order' => SORT_ASC]);
-    }
-}
-```
-
-### View
-
-Insert this code for create widget or load all EAV inputs fields for model
-
-### Form edit
-
-fo load selected field
-
-``` php
-<?=$form->field($model,'test5', ['class' => '\mirocow\eav\widgets\ActiveField'])->eavInput(); ?>
-```
-or for load all fields
-
-#### Simple
-
-``` php
-<?php
-foreach($model->getEavAttributes()->all() as $attr) {
-    echo $form->field($model, $attr->name, ['class' => '\mirocow\eav\widgets\ActiveField'])->eavInput();
-}
-?>
-```
-
-or add sorted
-
-
-``` php
-<?php
-foreach($model->getEavAttributes()->orderBy(['order' => SORT_ASC])->all() as $attr) {
-    echo $form->field($model, $attr->name, ['class' => '\mirocow\eav\widgets\ActiveField'])->eavInput();
-}
-?>
-```
-
-### Advanced
-
-``` php
-<?php
-foreach($model->getEavAttributes(['entityId' => 8, 'typeId' => 3])->all() as $attr) {
-    echo $form->field($model, $attr->name, ['class' => '\mirocow\eav\widgets\ActiveField'])->eavInput();
-}
-?>
-```
-
-### Partial template
-
-``` php
-<p>
-Encode
-
-<?php
-    foreach($model->getEavAttributes()->all() as $attr) {
-        print_r($model[$attr->name]['value']);
-    }
-?>
-</p>
-
-<p>
-String
-
-<?php
-    foreach($model->getEavAttributes()->all() as $attr){
-        echo $model[$attr->name];
-    }
-?>
-```
-
-### Add attribute
-
-```php
-$attr = new mirocow\eav\models\EavAttribute();
-$attr->attributes = [
-    'entityId' => 1,                        // Category ID
-    'typeId' => 1,                          // ID type from eav_attribute_type
-    'name' => 'packing',                    // service name field
-    'label' => 'Packing',                   // label text for form
-    'defaultValue' => '10 kg',              // default value
-    'entityModel' => Product::className(),  // work model
-    'required' => false                     // add rule "required field"
-];
-$attr->save();
-
-$attr->attributes = [
-    'entityId' => 1,                        // Category ID
-    'typeId' => 1,                          // ID type from eav_attribute_type
-    'name' => 'color',                      // service name field
-    'label' => 'Color',                     // label text for form
-    'defaultValue' => 'white',              // default value
-    'entityModel' => Product::className(),  // work model
-    'required' => false                     // add rule "required field"
-];
-$attr->save();
-```
-
-### Add/Update values
-
-```php
-$model = Product::find()->where(['id' => 1])->one();
-$model->color = "blue";
-$model->packing = "12 kg";
-$model->save();
-```
-
-## Administrate GUI
-
-## Config module EAV for managment of fields
-In main config file:
-```php
-$modules = [
-        ...,
-        'eav' => [
-            'class' => 'mirocow\eav\Module',
-        ],
-];
-```
-
-## Form
-
-
-## Add / Edit attribute
-
-
-``` php
-<?= \mirocow\eav\admin\widgets\Fields::widget([
-    'model' => $model,
-    'categoryId' => $model->id,
-    'entityName' => 'Продукт',
-    'entityModel' => 'app\models\Product',
-])?>
 ```

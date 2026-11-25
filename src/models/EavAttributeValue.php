@@ -59,7 +59,10 @@ class EavAttributeValue extends \yii\db\ActiveRecord
 
     public function getPlanApp()
     {
-        return $this->hasOne(PlanApp::className(), ['id' => 'plan_app_id']);
+        if (class_exists('common\models\PlanApp')) {
+            return $this->hasOne('common\models\PlanApp', ['id' => 'plan_app_id']);
+        }
+        return null;
     }
 
     /**

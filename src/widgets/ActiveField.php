@@ -8,6 +8,7 @@ use yii\helpers\Html;
 
 class ActiveField extends \yii\widgets\ActiveField
 {
+    public $parts = [];
     public function eavInput($options = [])
     {
         $options = array_merge($this->inputOptions, $options);

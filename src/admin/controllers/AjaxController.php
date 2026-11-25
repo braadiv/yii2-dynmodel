@@ -44,7 +44,7 @@ class AjaxController extends Controller
         if (Yii::$app->request->isPost) {
             $post = Yii::$app->request->post();
 
-            if ($post['payload'] && $post['entityModel']) {
+            if (!empty($post['payload']) && !empty($post['entityModel'])) {
                 $payload = Json::decode($post['payload']);
 
                 if (!isset($payload['fields'])) {
@@ -54,7 +54,7 @@ class AjaxController extends Controller
                 $transaction = \Yii::$app->db->beginTransaction();
 
                 try {
-                    $categoryId = isset($post['categoryId']) ? $post['categoryId'] : 0;
+                    $categoryId = $post['categoryId'] ?? 0;
 
                     $entityId = EavEntity::find()->select(['id'])->where(
                         [
@@ -65,7 +65,7 @@ class AjaxController extends Controller
 
                     if (!$entityId) {
                         $entity = new EavEntity;
-                        $entity->entityName = isset($post['entityName']) ? $post['entityName'] : 'Untitled';
+                        $entity->entityName = $post['entityName'] ?? 'Untitled';
                         $entity->entityModel = $post['entityModel'];
                         $entity->categoryId = $categoryId;
                         $entity->save(false);
@@ -87,7 +87,7 @@ class AjaxController extends Controller
                         // Create new attribute
                         if (empty($attribute)) {
                             $attribute = new EavAttribute;
-                            $lastId = EavAttribute::find()
+                            $lastId = (int)EavAttribute::find()
                                           ->select(['id'])
                                           ->orderBy(['id' => SORT_DESC])
                                           ->limit(1)

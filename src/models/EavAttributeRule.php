@@ -12,6 +12,7 @@ use yii\helpers\Json;
  * @property integer $attributeId
  * @property string $rules
  */
+#[AllowDynamicProperties]
 class EavAttributeRule extends \yii\db\ActiveRecord
 {
     /**
@@ -88,7 +89,7 @@ class EavAttributeRule extends \yii\db\ActiveRecord
         }
 
         if (in_array($name, $this->getSkipFields())) {
-            $rules = Json::decode($this->rules);
+            $rules = !empty($this->rules) ? Json::decode($this->rules) : [];
 
             if (isset($rules[$name])) {
                 return $rules[$name];
@@ -108,7 +109,7 @@ class EavAttributeRule extends \yii\db\ActiveRecord
             return [];
         }
 
-        $rules = Json::decode($this->rules);
+        $rules = !empty($this->rules) ? Json::decode($this->rules) : [];
 
         if (!$rules) {
             $rules = [];

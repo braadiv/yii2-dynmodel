@@ -17,6 +17,7 @@ use NXP\MathExecutor;
  *
  * @package braadiv\dynmodel
  */
+#[AllowDynamicProperties]
 class EavModel extends BaseEavModel
 {
     // public $ConditionClass = "\common\\modules\\models\\Condition";
@@ -40,12 +41,11 @@ class EavModel extends BaseEavModel
     /** @var string[] */
     private $attributeLabels = [];
 
+    public $condition;
 
-    // public $condition;
-
-    // public $plan_app_id;
+    public $plan_app_id;
     
-    // public $row_no;
+    public $row_no;
 
 
 
@@ -255,7 +255,7 @@ class EavModel extends BaseEavModel
             $reflector =  \yii\helpers\BaseInflector::camelize($model->name);
             return $reflector;
         }
-        $reflector = new \ReflectionClass($model::className());
+        $reflector = new \ReflectionClass(is_object($model) ? get_class($model) : $model);
         return $reflector->getShortName();
     }
 }
