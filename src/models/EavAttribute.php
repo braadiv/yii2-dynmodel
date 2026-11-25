@@ -81,7 +81,7 @@ class EavAttribute extends \yii\db\ActiveRecord
      */
     public function getDefaultOption()
     {
-        return $this->hasOne(EavAttributeOption::className(), ['id' => 'defaultOptionId']);
+        return $this->hasOne(EavAttributeOption::class, ['id' => 'defaultOptionId']);
     }
 
     /**
@@ -89,7 +89,7 @@ class EavAttribute extends \yii\db\ActiveRecord
      */
     public function getEavType()
     {
-        return $this->hasOne(EavAttributeType::className(), ['id' => 'typeId']);
+        return $this->hasOne(EavAttributeType::class, ['id' => 'typeId']);
     }
 
     /**
@@ -97,7 +97,7 @@ class EavAttribute extends \yii\db\ActiveRecord
      */
     public function getEntity()
     {
-        return $this->hasOne(EavEntity::className(), ['id' => 'entityId']);
+        return $this->hasOne(EavEntity::class, ['id' => 'entityId']);
     }
 
     /**
@@ -105,7 +105,7 @@ class EavAttribute extends \yii\db\ActiveRecord
      */
     public function getEavOptions()
     {
-        return $this->hasMany(EavAttributeOption::className(), ['attributeId' => 'id'])
+        return $this->hasMany(EavAttributeOption::class, ['attributeId' => 'id'])
             ->orderBy(['eav_attribute_option.order' => SORT_ASC]);
     }
 
@@ -114,7 +114,7 @@ class EavAttribute extends \yii\db\ActiveRecord
      */
     public function getEavAttributeValues()
     {
-        return $this->hasMany(EavAttributeValue::className(), ['attributeId' => 'id']);
+        return $this->hasMany(EavAttributeValue::class, ['attributeId' => 'id']);
     }
 
     /**
@@ -122,12 +122,12 @@ class EavAttribute extends \yii\db\ActiveRecord
      */
     public function getAttributeRule()
     {
-        return $this->hasOne(EavAttributeRule::className(), ['attributeId' => 'id']);
+        return $this->hasOne(EavAttributeRule::class, ['attributeId' => 'id']);
     }
 
     public function getAttributeTemplate()
     {
-        return $this->hasOne(EavAttribute::className(), ['id' => 'attributeTempId']);
+        return $this->hasOne(EavAttribute::class, ['id' => 'attributeTempId']);
     }
 
     public function getRequired()
@@ -177,9 +177,9 @@ class EavAttribute extends \yii\db\ActiveRecord
 
     public function isCondition()
     {
-        $dd = \common\modules\models\PlanCondition::findOne([ 'attributeId'=>  $this->id]);
-        if($dd){
-            return true;
+        if (class_exists('common\modules\models\PlanCondition')) {
+            $dd = \common\modules\models\PlanCondition::findOne(['attributeId' => $this->id]);
+            return (bool)$dd;
         }
         return false;
     }
@@ -187,7 +187,10 @@ class EavAttribute extends \yii\db\ActiveRecord
 
     public function getPlanCondition()
     {
-        return $this->hasOne(\common\modules\models\PlanCondition::className(), ['attributeId' => 'id']);
+        if (class_exists('common\modules\models\PlanCondition')) {
+            return $this->hasOne('common\modules\models\PlanCondition', ['attributeId' => 'id']);
+        }
+        return null;
     }
     
 

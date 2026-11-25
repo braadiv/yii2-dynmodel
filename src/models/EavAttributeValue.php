@@ -70,7 +70,7 @@ class EavAttributeValue extends \yii\db\ActiveRecord
      */
     public function getEavAttribute()
     {
-        return $this->hasOne(EavAttribute::className(), ['id' => 'attributeId']);
+        return $this->hasOne(EavAttribute::class, ['id' => 'attributeId']);
     }
 
     /**
@@ -78,7 +78,7 @@ class EavAttributeValue extends \yii\db\ActiveRecord
      */
     public function getEntity()
     {
-        return $this->hasOne(EavEntity::className(), ['id' => 'entityId']);
+        return $this->hasOne(EavEntity::class, ['id' => 'entityId']);
     }
 
     /**
@@ -86,7 +86,7 @@ class EavAttributeValue extends \yii\db\ActiveRecord
      */
     public function getOption()
     {
-        return $this->hasOne(EavAttributeOption::className(), ['id' => 'optionId']);
+        return $this->hasOne(EavAttributeOption::class, ['id' => 'optionId']);
     }
 
     public function getValue()

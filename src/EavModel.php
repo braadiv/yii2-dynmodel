@@ -59,7 +59,7 @@ class EavModel extends BaseEavModel
      */
     public static function create($params)
     {
-        $params['class'] = static::className();
+        $params['class'] = static::class;
 
         /** @var static $model */
         $model = Yii::createObject($params);

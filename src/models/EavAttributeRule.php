@@ -55,7 +55,7 @@ class EavAttributeRule extends \yii\db\ActiveRecord
      */
     public function getEavAttribute()
     {
-        return $this->hasOne(EavAttribute::className(), ['id' => 'attributeId']);
+        return $this->hasOne(EavAttribute::class, ['id' => 'attributeId']);
     }
 
     private function getDefaultFields()

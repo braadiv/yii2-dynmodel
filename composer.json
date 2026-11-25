@@ -1,15 +1,42 @@
 {
 	"name": "braadiv/yii2-dynmodel",
-	"description": "PHP 8.4 LTS Modernized Fork of mirocow/yii2-eav (Dynamic Model & EAV for Yii2)",
+	"description": "PHP 8.4 LTS Modernized & Drop-in Replacement Fork of mirocow/yii2-eav (Dynamic Model & EAV Architecture for Yii2)",
+	"keywords": [
+		"yii2",
+		"extension",
+		"braadiv",
+		"dynamic form",
+		"dynamic model",
+		"Generate dynamic model",
+		"dynamic multiple models model",
+		"eav",
+		"entity-attribute-value",
+		"form builder",
+		"yii2-eav",
+		"php84",
+		"php8.4",
+		"php-8.4"
+	],
+	"homepage": "https://github.com/braadiv/yii2-dynmodel",
 	"license": "MIT",
-	"keywords": ["yii2", "extension", "braadiv", "dynamic form", "dynamic model", "Generate dynamic model", "dynamic multiple models model", "eav", "php84"],
 	"type": "yii2-extension",
 	"authors": [
 		{
+			"name": "Alexey Samoylov",
+			"email": "alexey.samoylov@gmail.com",
+			"role": "Original Author (mirocow/yii2-eav)"
+		},
+		{
 			"name": "Braa Alsalahi",
-			"email": "braaalsalahi2013@gmail.com"
+			"email": "braaalsalahi2013@gmail.com",
+			"homepage": "https://github.com/braadiv",
+			"role": "Fork Maintainer (PHP 8.4 Modernization)"
 		}
 	],
+	"support": {
+		"issues": "https://github.com/braadiv/yii2-dynmodel/issues",
+		"source": "https://github.com/braadiv/yii2-dynmodel"
+	},
 	"minimum-stability": "dev",
 	"require": {
 		"php": ">=8.1 || ^8.2 || ^8.3 || ^8.4",

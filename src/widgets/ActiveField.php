@@ -24,7 +24,7 @@ class ActiveField extends \yii\widgets\ActiveField
             [
                 'entityModel' => $model,
                 'attribute' => $attribute,
-                'valueClass' => \braadiv\dynmodel\models\EavAttributeValue::className(),
+                'valueClass' => \braadiv\dynmodel\models\EavAttributeValue::class,
             ]
         );
         $handler = $eavModel->handlers[$attribute];

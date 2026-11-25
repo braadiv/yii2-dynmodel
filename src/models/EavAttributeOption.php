@@ -40,7 +40,7 @@ class EavAttributeOption extends \yii\db\ActiveRecord
                 ['attributeId'],
                 'exist',
                 'skipOnError' => true,
-                'targetClass' => EavAttribute::className(),
+                'targetClass' => EavAttribute::class,
                 'targetAttribute' => ['attributeId' => 'id'],
             ],
         ];
@@ -67,7 +67,7 @@ class EavAttributeOption extends \yii\db\ActiveRecord
      */
     public function getEavAttributes()
     {
-        return $this->hasMany(EavAttribute::className(), ['defaultOptionId' => 'id'])
+        return $this->hasMany(EavAttribute::class, ['defaultOptionId' => 'id'])
             ->orderBy(['order' => SORT_DESC]);
     }
 
@@ -76,7 +76,7 @@ class EavAttributeOption extends \yii\db\ActiveRecord
      */
     public function getAttribute($name = '')
     {
-        return $this->hasOne(EavAttribute::className(), ['id' => 'attributeId']);
+        return $this->hasOne(EavAttribute::class, ['id' => 'attributeId']);
     }
 
     /**
@@ -84,7 +84,7 @@ class EavAttributeOption extends \yii\db\ActiveRecord
      */
     public function getValues()
     {
-        return $this->hasMany(EavAttributeValue::className(), ['optionId' => 'id']);
+        return $this->hasMany(EavAttributeValue::class, ['optionId' => 'id']);
     }
 
     public function getListAttributes()
